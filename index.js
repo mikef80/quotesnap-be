@@ -1,25 +1,16 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const apiRouter = require("./routes/api-router");
+
 require("dotenv").config();
 
-const routes = require("./routes/routes");
-
 const app = express();
+
 app.use(express.json());
-app.use("/api", routes);
 
-const mongoString = "mongodb://localhost:27017/quotesnap";
+app.use("/api", apiRouter);
 
-mongoose.connect(mongoString);
-const database = mongoose.connection;
-
-database.on("error", (error) => {
-  console.log(error);
+app.listen(3000, () => {
+  console.log("Server started at PORT 3000");
 });
 
-database.once("connected", () => {
-  app.listen(3000, () => {
-    console.log("Server started at PORT 3000");
-  });
-  console.log("DB connected!");
-});
+module.exports = app;
