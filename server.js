@@ -15,3 +15,5 @@ mongoose
   .catch(() => {
     console.log("error");
   });
+
+//if you want to test in insomnia then run this file

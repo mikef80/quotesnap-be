@@ -1,3 +1,6 @@
+//if you are testing outisde of test file - with insomnia for example, run the seed file 
+//to reset the database back to the base state.
+
 const allCategories = require("./data/categoryData");
 const allQuotes = require("./data/quoteData");
 const allUsers = require("./data/userdata");
