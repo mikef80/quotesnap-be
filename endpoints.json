@@ -1,0 +1,66 @@
+{
+  "GET /api": {
+    "description": "serves up a json representation of all the available endpoints of the api",
+    "queries": [],
+    "exampleRequest": {},
+    "exampleResponse": {
+      "GET /api/users": {
+        "description": "serves an array of all users",
+        "queries": [],
+        "exampleResponse": {
+          "users": [
+            {
+              "_id": "6593ea41c9a9cf457f28a326",
+              "username": "Hello",
+              "firstname": "jamie",
+              "lastname": "harper",
+              "email": "a@a.com"
+            },
+            {
+              "_id": "6593ea41c9a9cf457f28a327",
+              "username": "ASKJHD",
+              "firstname": "james",
+              "lastname": "harper",
+              "email": "b@a.com"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "_id": "6593ea41c9a9cf457f28a326",
+          "username": "Hello",
+          "firstname": "jamie",
+          "lastname": "harper",
+          "email": "a@a.com"
+        },
+        {
+          "_id": "6593ea41c9a9cf457f28a327",
+          "username": "ASKJHD",
+          "firstname": "james",
+          "lastname": "harper",
+          "email": "b@a.com"
+        }
+      ]
+    }
+  },
+  "GET /api/users/username": {
+    "description": "serves a user object by username provided",
+    "queries": [],
+    "exampleResponse": {
+      "user": {
+        "_id": "6593ed200e9bf4ea20950890",
+        "username": "Hello",
+        "firstname": "jamie",
+        "lastname": "harper",
+        "email": "a@a.com"
+      }
+    }
+  }
+}

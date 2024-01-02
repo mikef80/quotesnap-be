@@ -8,6 +8,7 @@ const allQuotes = require("../data/quoteData");
 const allUsers = require("../data/userdata");
 const { mongoLink, mongoDbName } = require("../testMongoDB");
 const seed = require("../seed");
+const endpoints = require('../endpoints.json')
 
 //reset db before each test
 beforeEach(async () => {
@@ -220,5 +221,17 @@ describe("USERS", () => {
           expect(body.msg).toBe("Something went wrong - try again!");
         });
     });
+  });
+});
+
+describe("ENDPOINTS", () => {
+  it("GET:200 should a list of endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body);
+      expect(body.endpoints).toEqual(endpoints)
+    })
   });
 });
