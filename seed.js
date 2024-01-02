@@ -1,4 +1,4 @@
-//if you are testing outisde of test file - with insomnia for example, run the seed file 
+//if you are testing outisde of test file - with insomnia for example, run the seed file
 //to reset the database back to the base state.
 
 const allCategories = require("./data/categoryData");
@@ -8,7 +8,13 @@ const { mongoLink, mongoDbName } = require("./testMongoDB");
 
 const MongoClient = require("mongodb").MongoClient;
 
-async function seedDB(mongoLink,mongoDbName, allUsers, allCategories, allQuotes) {
+async function seedDB(
+  mongoLink,
+  mongoDbName,
+  allUsers,
+  allCategories,
+  allQuotes
+) {
   const client = new MongoClient(mongoLink);
   try {
     await client.connect();
@@ -44,6 +50,6 @@ async function seedDB(mongoLink,mongoDbName, allUsers, allCategories, allQuotes)
   }
 }
 
-seedDB(mongoLink,mongoDbName, allUsers, allCategories, allQuotes);
+seedDB(mongoLink, mongoDbName, allUsers, allCategories, allQuotes);
 
 module.exports = seedDB;

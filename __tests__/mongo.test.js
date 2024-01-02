@@ -235,26 +235,45 @@ describe("ENDPOINTS", () => {
   });
 });
 
-describe.only("QUOTES", () => {
-  test("200, each quote has correct values and check if its an array of quotes", async () => {
-    return request(app)
-      .get("/api/quotes")
-      .expect(200)
-      .then(({ body: { quotes } }) => {
-        console.log(quotes);
-        expect(quotes.length).toBe(11);
-        quotes.forEach((quote) => {
-          expect(quote).toMatchObject({
-            quoteText: expect.any(String),
-            quoteAuthor: expect.any(String),
-            quoteOrigin: expect.any(String),
-            quoteLocation: expect.any(String),
-            quoteImage: expect.any(String),
-            quoteIsPrivate: expect.any(Boolean),
-            userId: expect.any(String),
-            categoryId: expect.any(String),
+describe("QUOTES", () => {
+  describe("get all quotes", () => {
+    test("200, each quote has correct values and check if its an array of quotes", async () => {
+      return request(app)
+        .get("/api/quotes")
+        .expect(200)
+        .then(({ body: { quotes } }) => {
+          expect(quotes.length).toBe(11);
+          quotes.forEach((quote) => {
+            expect(quote).toMatchObject({
+              quoteText: expect.any(String),
+              quoteAuthor: expect.any(String),
+              quoteOrigin: expect.any(String),
+              quoteLocation: expect.any(String),
+              quoteImage: expect.any(String),
+              quoteIsPrivate: expect.any(Boolean),
+              userId: expect.any(String),
+              categoryId: expect.any(String),
+            });
           });
         });
-      });
+    });
+  });
+  describe.only("GET quote by id", () => {
+    test("When given an id, should return the quote by that id", async () => {
+      return request(app)
+        .get("/api/quotes")
+        .expect(200)
+        .then(({ body: { quotes } }) => {
+          const testQuote = quotes[0];
+          console.log(testQuote, "test quote!");
+          return request(app)
+            .get(`/api/quotes/${testQuote._id}`)
+            .expect(200)
+            .then(({ body: { quote } }) => {
+              console.log(quote, "this is quote");
+              expect(quote).toEqual(testQuote);
+            });
+        });
+    });
   });
 });
