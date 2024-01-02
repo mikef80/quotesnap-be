@@ -8,7 +8,7 @@ const allQuotes = require("../data/quoteData");
 const allUsers = require("../data/userdata");
 const { mongoLink, mongoDbName } = require("../testMongoDB");
 const seed = require("../seed");
-const endpoints = require('../endpoints.json')
+const endpoints = require("../endpoints.json");
 
 //reset db before each test
 beforeEach(async () => {
@@ -230,8 +230,19 @@ describe("ENDPOINTS", () => {
       .get("/api")
       .expect(200)
       .then(({ body }) => {
+        expect(body.endpoints).toEqual(endpoints);
+      });
+  });
+});
+
+describe.only("QUOTES", () => {
+  it("returns an array of quotes", () => {
+    return request(app)
+      .get("/api/quotes")
+      .expect(200)
+      .then(({ body }) => {
         console.log(body);
-      expect(body.endpoints).toEqual(endpoints)
-    })
+        expect(Array.isArray(body.quotes)).toBe(true);
+      });
   });
 });
