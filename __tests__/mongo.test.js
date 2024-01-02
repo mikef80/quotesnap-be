@@ -236,13 +236,25 @@ describe("ENDPOINTS", () => {
 });
 
 describe.only("QUOTES", () => {
-  it("returns an array of quotes", () => {
+  test("200, each quote has correct values and check if its an array of quotes", async () => {
     return request(app)
       .get("/api/quotes")
       .expect(200)
-      .then(({ body }) => {
-        console.log(body);
-        expect(Array.isArray(body.quotes)).toBe(true);
+      .then(({ body: { quotes } }) => {
+        console.log(quotes);
+        expect(quotes.length).toBe(11);
+        quotes.forEach((quote) => {
+          expect(quote).toMatchObject({
+            quoteText: expect.any(String),
+            quoteAuthor: expect.any(String),
+            quoteOrigin: expect.any(String),
+            quoteLocation: expect.any(String),
+            quoteImage: expect.any(String),
+            quoteIsPrivate: expect.any(Boolean),
+            userId: expect.any(String),
+            categoryId: expect.any(String),
+          });
+        });
       });
   });
 });
