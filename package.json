@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --watch",
     "test-db": "npm test __tests__/mongo.test.js",
     "serve": "node server.js",
     "dev": "nodemon server.js",
