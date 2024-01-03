@@ -8,7 +8,7 @@ const allQuotes = require("../data/quoteData");
 const allUsers = require("../data/userdata");
 const { mongoLink, mongoDbName } = require("../testMongoDB");
 const seed = require("../seed");
-const endpoints = require('../endpoints.json')
+const endpoints = require("../endpoints.json");
 
 //reset db before each test
 beforeEach(async () => {
@@ -230,8 +230,104 @@ describe("ENDPOINTS", () => {
       .get("/api")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
-      expect(body.endpoints).toEqual(endpoints)
-    })
+        expect(body.endpoints).toEqual(endpoints);
+      });
+  });
+});
+
+describe("QUOTES", () => {
+  describe("get all quotes", () => {
+    test("200, each quote has correct values and check if its an array of quotes", async () => {
+      return request(app)
+        .get("/api/quotes")
+        .expect(200)
+        .then(({ body: { quotes } }) => {
+          expect(quotes.length).toBe(11);
+          quotes.forEach((quote) => {
+            expect(quote).toMatchObject({
+              quoteText: expect.any(String),
+              quoteAuthor: expect.any(String),
+              quoteOrigin: expect.any(String),
+              quoteLocation: expect.any(String),
+              quoteImage: expect.any(String),
+              quoteIsPrivate: expect.any(Boolean),
+              userId: expect.any(String),
+              categoryId: expect.any(String),
+            });
+          });
+        });
+    });
+  });
+
+  describe("post a quote", () => {
+    test("add a quote to the db", () => {
+      const newQuote = {
+        quoteText: "test a POST quote",
+        quoteAuthor: "test author",
+        quoteOrigin: "fiction book",
+        quoteLocation: "[10,10]",
+        quoteImage: "apicturelink.jpg",
+        quoteIsPrivate: Math.random() > 0.5 ? true : false,
+        quoteCategory: "Book",
+        quoteUser: "Hello",
+      };
+      return request(app)
+        .post("/api/quotes")
+        .send(newQuote)
+        .expect(201)
+        .then(({ body }) => {
+          const quote = body.quote;
+          expect(quote).toMatchObject({
+            _id: expect.any(String),
+            quoteText: "test a POST quote",
+            quoteAuthor: "test author",
+            quoteOrigin: "fiction book",
+            quoteLocation: "[10,10]",
+            quoteImage: "apicturelink.jpg",
+            quoteIsPrivate: newQuote.quoteIsPrivate,
+            quoteCategory: "Book",
+            quoteUser: "Hello",
+          });
+        });
+    });
+
+    it("400, bad request - username invalid", () => {
+      const newQuote = {
+        quoteText: "test a POST quote",
+        quoteAuthor: "test author",
+        quoteOrigin: "fiction book",
+        quoteLocation: "[10,10]",
+        quoteImage: "apicturelink.jpg",
+        quoteIsPrivate: Math.random() > 0.5 ? true : false,
+        quoteCategory: "Book",
+        quoteUser: "Pineapple",
+      };
+      return request(app)
+        .post("/api/quotes")
+        .send(newQuote)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad request - username not found");
+        });
+    });
+
+    it("400, bad request - missing keys in quote info", () => {
+      const newQuote = {
+        quoteText: "test a POST quote",
+        quoteOrigin: "fiction book",
+        quoteLocation: "[10,10]",
+        quoteImage: "apicturelink.jpg",
+        quoteIsPrivate: Math.random() > 0.5 ? true : false,
+        quoteCategory: "Book",
+        quoteUser: "Pineapple",
+      };
+      return request(app)
+        .post("/api/quotes")
+        .send(newQuote)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad request!");
+        });
+    });
   });
 });
