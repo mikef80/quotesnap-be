@@ -145,7 +145,11 @@ describe("USERS", () => {
           expect(body.msg).toBe("Bad request!");
         });
     });
+    /// who knows? this will sometimes pass sometimes not,
+    /// think it is a seeding async issue, but it does work how you would 
+    /// want if the data is ready to search
     test("should fail if username is already in db", () => {
+      seed(mongoLink, mongoDbName, allUsers, allCategories, allQuotes);
       const toSend = {
         username: "ASKJHD",
         firstname: "test",
