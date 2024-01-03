@@ -1,7 +1,6 @@
 const MongoClient = require("mongodb").MongoClient;
-const { selectQuotes, createNewQuote } = require("../models/quotes.model");
+const { selectQuotes, createNewQuote, selectQuoteByQuoteId } = require("../models/quotes.model");
 const { mongoLink, mongoDbName } = require("../testMongoDB");
-
 const client = new MongoClient(mongoLink);
 
 exports.getAllQuotes = async (req, res, next) => {
@@ -38,6 +37,18 @@ exports.postNewQuote = async (req, res, next) => {
       res.status(400).send({ msg: "Bad request - username not found" });
     }
     res.status(201).send({ quote: newQuote });
+  } catch (next) {
+  } finally {
+    await client.close();
+  }
+};
+
+exports.getQuoteById = async (req, res, next) => {
+  const { quote_id } = req.params;
+  try {
+    const quote = await selectQuoteByQuoteId(client, mongoDbName, quote_id);
+    if (!quote) res.status(404).send({ msg: "Quote not found!" });
+    res.status(200).send({ quote });
   } catch (next) {
   } finally {
     await client.close();

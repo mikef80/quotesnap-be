@@ -330,4 +330,23 @@ describe("QUOTES", () => {
         });
     });
   });
+
+  describe("GET quote by id", () => {
+    test("When given an id, should return the quote by that id", async () => {
+      return request(app)
+        .get("/api/quotes")
+        .expect(200)
+        .then(({ body: { quotes } }) => {
+          const testQuote = quotes[0];
+          // console.log(testQuote, "test quote!");
+          return request(app)
+            .get(`/api/quotes/${testQuote._id}`)
+            .expect(200)
+            .then(({ body: { quote } }) => {
+              //   console.log(quote, "this is quote");
+              expect(quote).toEqual(testQuote);
+            });
+        });
+    });
+  });
 });
