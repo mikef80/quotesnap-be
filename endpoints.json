@@ -50,7 +50,7 @@
       ]
     }
   },
-  "GET /api/users/username": {
+  "GET /api/users/:username": {
     "description": "serves a user object by username provided",
     "queries": [],
     "exampleResponse": {
@@ -62,5 +62,93 @@
         "email": "a@a.com"
       }
     }
+  },
+  "GET /api/quotes": {
+    "description": "serves an array of all quotes",
+    "queries": [],
+    "exampleResponse": {
+      "quotes": [
+        {
+          "_id": "6594329ec2dff3a32d33fe28",
+          "quoteText": "a random quote",
+          "quoteAuthor": "a quote author",
+          "quoteOrigin": "fiction book",
+          "quoteLocation": "[10,10]",
+          "quoteImage": "apicturelink.jpg",
+          "quoteIsPrivate": true,
+          "userId": "6594329ec2dff3a32d33fe1f",
+          "categoryId": "6594329ec2dff3a32d33fe25"
+        },
+        {
+          "_id": "6594329ec2dff3a32d33fe29",
+          "quoteText": "a random quotequotequotequote",
+          "quoteAuthor": "a quote author",
+          "quoteOrigin": "fiction book",
+          "quoteLocation": "[10,10]",
+          "quoteImage": "apicturelink.jpg",
+          "quoteIsPrivate": true,
+          "userId": "6594329ec2dff3a32d33fe1f",
+          "categoryId": "6594329ec2dff3a32d33fe25"
+        }
+      ]
+    }
+  },
+  "GET /api/quotes/:quote_id": {
+    "description": "serves a quote object by quote ID provided",
+    "queries": [],
+    "exampleResponse": {
+      "quote": {
+        "_id": "6594329ec2dff3a32d33fe28",
+        "quoteText": "a random quote",
+        "quoteAuthor": "a quote author",
+        "quoteOrigin": "fiction book",
+        "quoteLocation": "[10,10]",
+        "quoteImage": "apicturelink.jpg",
+        "quoteIsPrivate": true,
+        "userId": "6594329ec2dff3a32d33fe1f",
+        "categoryId": "6594329ec2dff3a32d33fe25"
+      }
+    }
+  },
+  "POST /api/users": {
+    "description": "returns an object of a user object when sent a username,firstname,lastname,email",
+    "queries": [],
+    "exampleRequest": {
+      "username": "testuser",
+      "firstname": "test",
+      "lastname": "user",
+      "email": "test@user.com"
+    },
+    "exampleResponse": {
+      "user": {
+        "_id": "659584f5b509ec9b4f604e62",
+        "username": "testuser",
+        "firstname": "test",
+        "lastname": "user",
+        "email": "test@user.com"
+      }
+    }
+  },
+  "PATCH /api/users": {
+    "description": "returns an object of a user object given keys to update",
+    "queries": [],
+    "exampleRequest": {
+      "firstname": "newName",
+      "lastname": "newLastName"
+    },
+    "exampleResponse": {
+      "user": {
+        "_id": "659584f5b509ec9b4f604e62",
+        "username": "Hello",
+        "firstname": "newName",
+        "lastname": "newLastName",
+        "email": "a@a.com"
+      }
+    }
+  },
+  "DELETE /api/users/:username": {
+    "description": "Deletes a user when given a username",
+    "queries": [],
+    "exampleResponse": {}
   }
 }
