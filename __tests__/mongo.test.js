@@ -258,21 +258,56 @@ describe("QUOTES", () => {
         });
     });
   });
-  describe.only("GET quote by id", () => {
-    test("When given an id, should return the quote by that id", async () => {
+
+  describe.only("post a quote", () => {
+    test("add a quote to the db", () => {
+      const newQuote = {
+        quoteText: "test a POST quote",
+        quoteAuthor: "test author",
+        quoteOrigin: "fiction book",
+        quoteLocation: "[10,10]",
+        quoteImage: "apicturelink.jpg",
+        quoteIsPrivate: Math.random() > 0.5 ? true : false,
+        quoteCategory: "Book",
+        quoteUser: "Hello",
+      };
       return request(app)
-        .get("/api/quotes")
-        .expect(200)
-        .then(({ body: { quotes } }) => {
-          const testQuote = quotes[0];
-          console.log(testQuote, "test quote!");
-          return request(app)
-            .get(`/api/quotes/${testQuote._id}`)
-            .expect(200)
-            .then(({ body: { quote } }) => {
-              console.log(quote, "this is quote");
-              expect(quote).toEqual(testQuote);
-            });
+        .post("/api/quotes")
+        .send(newQuote)
+        .expect(201)
+        .then(({ body }) => {
+          const quote = body.quote;
+          expect(quote).toMatchObject({
+            _id: expect.any(String),
+            quoteText: "test a POST quote",
+            quoteAuthor: "test author",
+            quoteOrigin: "fiction book",
+            quoteLocation: "[10,10]",
+            quoteImage: "apicturelink.jpg",
+            quoteIsPrivate: newQuote.quoteIsPrivate,
+            quoteCategory: "Book",
+            quoteUser: "Hello",
+          });
+        });
+    });
+
+    it("400, bad request - username invalid", () => {
+      const newQuote = {
+        quoteText: "test a POST quote",
+        quoteAuthor: "test author",
+        quoteOrigin: "fiction book",
+        quoteLocation: "[10,10]",
+        quoteImage: "apicturelink.jpg",
+        quoteIsPrivate: Math.random() > 0.5 ? true : false,
+        quoteCategory: "Book",
+        quoteUser: "Pineapple",
+      };
+      return request(app)
+        .post("/api/quotes")
+        .send(newQuote)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad request - username not found");
         });
     });
   });

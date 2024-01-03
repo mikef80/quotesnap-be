@@ -1,5 +1,5 @@
 const MongoClient = require("mongodb").MongoClient;
-const { selectQuotes, selectQuoteByQuoteId } = require("../models/quotes.model");
+const { selectQuotes, createNewQuote } = require("../models/quotes.model");
 const { mongoLink, mongoDbName } = require("../testMongoDB");
 
 const client = new MongoClient(mongoLink);
@@ -14,15 +14,32 @@ exports.getAllQuotes = async (req, res, next) => {
   }
 };
 
-exports.getQuoteById = async (req, res, next) => {
-  const { quoteId } = req.params;
+exports.postNewQuote = async (req, res, next) => {
+  const quoteInfo = req.body;
+  [
+    "quoteText",
+    "quoteAuthor",
+    "quoteOrigin",
+    "quoteLocation",
+    "quoteImage",
+    "quoteIsPrivate",
+    "quoteCategory",
+    "quoteUser",
+  ].forEach((key) => {
+    if (!Object.keys(quoteInfo).includes(key)) {
+      req.status(400).send({ msg: "Bad request!" });
+    }
+  });
+
   try {
-    const quote = await selectQuoteByQuoteId(client, mongoDbName, quoteId);
-    console.log(quote)
-    if (!quote) res.status(404).send({ msg: "Quote not found!" });
-    res.status(200).send({ quote });
+    const newQuote = await createNewQuote(client, mongoDbName, quoteInfo);
+
+    if (!newQuote || newQuote === null) {
+      res.status(400).send({ msg: "Bad request - username not found" });
+    }
+    res.status(201).send({ quote: newQuote });
   } catch (next) {
   } finally {
     await client.close();
   }
-}
+};
