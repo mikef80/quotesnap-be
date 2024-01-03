@@ -10,6 +10,9 @@ const { mongoLink, mongoDbName } = require("../testMongoDB");
 const seed = require("../seed");
 const endpoints = require("../endpoints.json");
 
+beforeAll(async () => {
+  await seed(mongoLink, mongoDbName, allUsers, allCategories, allQuotes);
+});
 //reset db before each test
 beforeEach(async () => {
   await seed(mongoLink, mongoDbName, allUsers, allCategories, allQuotes);
@@ -22,7 +25,7 @@ afterAll(async () => {
 
 describe("USERS", () => {
   describe("GET All Users", () => {
-    test("should return all of the users in the database", async () => {
+    test("should return all of the users in the database", () => {
       return request(app)
         .get("/api/users")
         .expect(200)
@@ -327,6 +330,62 @@ describe("QUOTES", () => {
         .expect(400)
         .then(({ body }) => {
           expect(body.msg).toBe("Bad request!");
+        });
+    });
+  });
+
+  describe("GET quote by id", () => {
+    test("When given an id, should return the quote by that id", async () => {
+      return request(app)
+        .get("/api/quotes")
+        .expect(200)
+        .then(({ body: { quotes } }) => {
+          const testQuote = quotes[0];
+          // console.log(testQuote, "test quote!");
+          return request(app)
+            .get(`/api/quotes/${testQuote._id}`)
+            .expect(200)
+            .then(({ body: { quote } }) => {
+              //   console.log(quote, "this is quote");
+              expect(quote).toEqual(testQuote);
+            });
+        });
+    });
+
+    test("Should fail if id doesnt exist", () => {
+      const nonExistId = "65957a74106ffd05f02e7900";
+      return request(app)
+        .get(`/api/quotes/${nonExistId}`)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Quote not found!");
+        });
+    });
+    test("Should fail if id is bad", () => {
+      const badID = ";'#[#/.'#";
+      return request(app)
+        .get(`/api/quotes/${badID}`)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid ID!");
+        });
+    });
+    test("Should fail if id is too short", () => {
+      const shortID = "65957a74106ffd05f02e790";
+      return request(app)
+        .get(`/api/quotes/${shortID}`)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid ID!");
+        });
+    });
+    test("Should fail if id is too long", () => {
+      const longID = "65957a74106ffd05f02e79000";
+      return request(app)
+        .get(`/api/quotes/${longID}`)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid ID!");
         });
     });
   });
