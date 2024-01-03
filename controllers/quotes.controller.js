@@ -27,7 +27,7 @@ exports.postNewQuote = async (req, res, next) => {
     "quoteUser",
   ].forEach((key) => {
     if (!Object.keys(quoteInfo).includes(key)) {
-      req.status(400).send({ msg: "Bad request!" });
+      res.status(400).send({ msg: "Bad request!" });
     }
   });
 

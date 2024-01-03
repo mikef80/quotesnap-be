@@ -259,7 +259,7 @@ describe("QUOTES", () => {
     });
   });
 
-  describe.only("post a quote", () => {
+  describe("post a quote", () => {
     test("add a quote to the db", () => {
       const newQuote = {
         quoteText: "test a POST quote",
@@ -308,6 +308,25 @@ describe("QUOTES", () => {
         .expect(400)
         .then(({ body }) => {
           expect(body.msg).toBe("Bad request - username not found");
+        });
+    });
+
+    it("400, bad request - missing keys in quote info", () => {
+      const newQuote = {
+        quoteText: "test a POST quote",
+        quoteOrigin: "fiction book",
+        quoteLocation: "[10,10]",
+        quoteImage: "apicturelink.jpg",
+        quoteIsPrivate: Math.random() > 0.5 ? true : false,
+        quoteCategory: "Book",
+        quoteUser: "Pineapple",
+      };
+      return request(app)
+        .post("/api/quotes")
+        .send(newQuote)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad request!");
         });
     });
   });
