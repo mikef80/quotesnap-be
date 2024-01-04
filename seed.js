@@ -20,23 +20,6 @@ async function seedDB(mongoLink, mongoDbName, allUsers, allCategories, allQuotes
 
     await mngdb.collection("Users").insertMany(allUsers);
     await mngdb.collection("Categories").insertMany(allCategories);
-    const catsForSeed = await mngdb.collection("Categories").find({}).toArray();
-    // const usersForSeed = await mngdb.collection("Users").find({}).toArray();
-
-    for (const quote of allQuotes) {
-      // for (const user of usersForSeed) {
-      //   if (user.username === quote.quoteUser) {
-      //     quote.userId = user._id;
-      //     delete quote.quoteUser;
-      //   }
-      // }
-      for (const cat of catsForSeed) {
-        if (cat.categoryName === quote.quoteCategory) {
-          quote.categoryId = cat._id;
-          delete quote.quoteCategory;
-        }
-      }
-    }
     await mngdb.collection("Quotes").insertMany(allQuotes);
   } catch {
   } finally {

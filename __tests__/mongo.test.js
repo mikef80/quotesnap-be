@@ -283,7 +283,7 @@ describe("QUOTES", () => {
               quoteImage: expect.any(String),
               quoteIsPrivate: expect.any(Boolean),
               quoteUser: expect.any(String),
-              categoryId: expect.any(String),
+              quoteCategory: expect.any(String),
             });
           });
         });
