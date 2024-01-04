@@ -417,4 +417,14 @@ describe("QUOTES", () => {
         });
     });
   });
+  describe("GET all categories", () => {
+    test("Should return all categories", () => {
+      return request(app)
+        .get(`/api/categories`)
+        .expect(200)
+        .then(({ body: { categories } }) => {
+          expect(categories.length).toBe(3);
+        });
+    });
+  });
 });
