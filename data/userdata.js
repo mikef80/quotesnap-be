@@ -35,6 +35,12 @@ const allUsers = [
     lastname: "harper",
     email: "f@a.com",
   },
+  {
+    username: "noQuotes",
+    firstname: "dawe",
+    lastname: "hadadrper",
+    email: "f@da.com",
+  },
 ];
 
 module.exports = allUsers;

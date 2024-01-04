@@ -30,7 +30,7 @@ describe("USERS", () => {
         .get("/api/users")
         .expect(200)
         .then(({ body: { users } }) => {
-          expect(users.length).toBe(6);
+          expect(users.length).toBe(7);
           users.forEach((user) => {
             expect(user).toMatchObject({
               _id: expect.any(String),
@@ -146,10 +146,9 @@ describe("USERS", () => {
         });
     });
     /// who knows? this will sometimes pass sometimes not,
-    /// think it is a seeding async issue, but it does work how you would 
+    /// think it is a seeding async issue, but it does work how you would
     /// want if the data is ready to search
     test("should fail if username is already in db", () => {
-      seed(mongoLink, mongoDbName, allUsers, allCategories, allQuotes);
       const toSend = {
         username: "ASKJHD",
         firstname: "test",
@@ -231,6 +230,31 @@ describe("USERS", () => {
   });
 });
 
+describe("GET /users/:username/quotes", () => {
+  test("Should return a list of quotes for a username", () => {
+    const username = "Hello";
+    return request(app)
+      .get(`/api/users/${username}/quotes`)
+      .expect(200)
+      .then(({ body: { quotes } }) => {
+        expect(quotes.length).toBe(3);
+      });
+  });
+  test("Error if username doesn't exist", () => {
+    const username = "banana";
+    return request(app)
+      .get(`/api/users/${username}/quotes`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("User not found!");
+      });
+  });
+  test("if username exists but no quotes, return message that no items have been found", () => {
+    const username = "noQuotes";
+    return request(app).get(`/api/users/${username}/quotes`).expect(204);
+  });
+});
+
 describe("ENDPOINTS", () => {
   it("GET:200 should a list of endpoints", () => {
     return request(app)
@@ -258,7 +282,7 @@ describe("QUOTES", () => {
               quoteLocation: expect.any(String),
               quoteImage: expect.any(String),
               quoteIsPrivate: expect.any(Boolean),
-              userId: expect.any(String),
+              quoteUser: expect.any(String),
               categoryId: expect.any(String),
             });
           });

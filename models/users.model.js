@@ -34,3 +34,10 @@ exports.removeUserByUsername = async (client, mongoDbName, username) => {
   await client.connect();
   return client.db(mongoDbName).collection("Users").deleteOne({ username });
 };
+
+exports.selectQuotesByUsername = async (client, mongoDbName, username) => {
+  await client.connect();
+  const userExists = await this.selectUserByUsername(client, mongoDbName, username);
+  if (userExists) return client.db(mongoDbName).collection("Quotes").find({ quoteUser: username }).toArray();
+  else return null
+};
