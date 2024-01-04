@@ -4,6 +4,7 @@ const {
   selectUserByUsername,
   updateUserByUsername,
   removeUserByUsername,
+  selectQuotesByUsername,
 } = require("../models/users.model");
 const MongoClient = require("mongodb").MongoClient;
 const { mongoLink, mongoDbName } = require("../testMongoDB");
@@ -69,6 +70,24 @@ exports.deleteUserByUsername = async (req, res, next) => {
   try {
     const deleted = await removeUserByUsername(client, mongoDbName, username);
     deleted.deletedCount ? res.sendStatus(204) : res.status(400).send({ msg: "Something went wrong - try again!" });
+  } catch (next) {
+  } finally {
+    await client.close();
+  }
+};
+
+exports.getQuotesByUsername = async (req, res, next) => {
+  const { username } = req.params;
+  try {
+    const quotes = await selectQuotesByUsername(client, mongoDbName, username);
+    if (quotes === null) res.status(404).send({ msg: "User not found!" });
+    else {
+      if (quotes.length) {
+        res.status(200).send({ quotes });
+      } else {
+        res.sendStatus(204);
+      }
+    }
   } catch (next) {
   } finally {
     await client.close();
