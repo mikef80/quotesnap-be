@@ -63,6 +63,37 @@
       }
     }
   },
+  "GET /api/users/:username/quotes": {
+    "description": "serves an array of quotes for a given username",
+    "queries": [],
+    "exampleResponse": {
+      "quotes": [
+        {
+          "_id": "6594329ec2dff3a32d33fe28",
+          "quoteText": "a random quote",
+          "quoteAuthor": "a quote author",
+          "quoteOrigin": "fiction book",
+          "quoteLocation": "[10,10]",
+          "quoteImage": "apicturelink.jpg",
+          "quoteIsPrivate": true,
+          "quoteUser": "Hello",
+          "categoryId": "6594329ec2dff3a32d33fe25"
+        },
+        {
+          "_id": "6594329ec2dff3a32d33fe29",
+          "quoteText": "a random quotequotequotequote",
+          "quoteAuthor": "a quote author",
+          "quoteOrigin": "fiction book",
+          "quoteLocation": "[10,10]",
+          "quoteImage": "apicturelink.jpg",
+          "quoteIsPrivate": true,
+          "quoteUser": "Hello",
+          "categoryId": "6594329ec2dff3a32d33fe25"
+        }
+      ]
+    }
+  },
+
   "GET /api/quotes": {
     "description": "serves an array of all quotes",
     "queries": [],
@@ -76,7 +107,7 @@
           "quoteLocation": "[10,10]",
           "quoteImage": "apicturelink.jpg",
           "quoteIsPrivate": true,
-          "userId": "6594329ec2dff3a32d33fe1f",
+          "quoteUser": "Hello",
           "categoryId": "6594329ec2dff3a32d33fe25"
         },
         {
@@ -87,7 +118,7 @@
           "quoteLocation": "[10,10]",
           "quoteImage": "apicturelink.jpg",
           "quoteIsPrivate": true,
-          "userId": "6594329ec2dff3a32d33fe1f",
+          "quoteUser": "Hello",
           "categoryId": "6594329ec2dff3a32d33fe25"
         }
       ]
