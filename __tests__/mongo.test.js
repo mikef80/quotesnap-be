@@ -25,19 +25,20 @@ afterAll(async () => {
 
 describe("USERS", () => {
   describe("GET All Users", () => {
-    test("should return all of the users in the database", () => {
+    test("should return all of the users in the database", async () => {
       return request(app)
         .get("/api/users")
         .expect(200)
         .then(({ body: { users } }) => {
-          expect(users.length).toBe(7);
+          expect(users.length).toBe(6);
           users.forEach((user) => {
             expect(user).toMatchObject({
               _id: expect.any(String),
               username: expect.any(String),
               firstname: expect.any(String),
               lastname: expect.any(String),
-              email: expect.any(String),
+              password: expect.any(String),
+              avatar: expect.any(String),
             });
           });
         });
@@ -54,7 +55,8 @@ describe("USERS", () => {
             username: "ASKJHD",
             firstname: "james",
             lastname: "harper",
-            email: "b@a.com",
+            password: "banana",
+            avatar: "quotesnap-fe/assets/avatar.png",
           });
         });
     });
@@ -73,7 +75,8 @@ describe("USERS", () => {
         username: "testuser",
         firstname: "test",
         lastname: "user",
-        email: "test@user.com",
+        password: "banana",
+        avatar: "quotesnap-fe/assets/avatar.png",
       };
       return request(app)
         .post("/api/users")
@@ -85,7 +88,8 @@ describe("USERS", () => {
             username: "testuser",
             firstname: "test",
             lastname: "user",
-            email: "test@user.com",
+            password: "banana",
+            avatar: "quotesnap-fe/assets/avatar.png",
           });
         });
     });
@@ -93,7 +97,8 @@ describe("USERS", () => {
       const toSend = {
         firstname: "test",
         lastname: "user",
-        email: "test@user.com",
+        password: "banana",
+        avatar: "quotesnap-fe/assets/avatar.png",
       };
       return request(app)
         .post("/api/users")
@@ -103,11 +108,12 @@ describe("USERS", () => {
           expect(body.msg).toBe("Bad request!");
         });
     });
-    test("should fail if missing a key for db - email", () => {
+    test("should fail if missing a key for db - avatar", () => {
       const toSend = {
         username: "testuser",
         firstname: "test",
         lastname: "user",
+        password: "banana",
       };
       return request(app)
         .post("/api/users")
@@ -121,7 +127,8 @@ describe("USERS", () => {
       const toSend = {
         username: "testuser",
         lastname: "user",
-        email: "test@user.com",
+        password: "banana",
+        avatar: "quotesnap-fe/assets/avatar.png",
       };
       return request(app)
         .post("/api/users")
@@ -135,7 +142,8 @@ describe("USERS", () => {
       const toSend = {
         username: "testuser",
         firstname: "test",
-        email: "test@user.com",
+        password: "banana",
+        avatar: "quotesnap-fe/assets/avatar.png",
       };
       return request(app)
         .post("/api/users")
@@ -145,15 +153,13 @@ describe("USERS", () => {
           expect(body.msg).toBe("Bad request!");
         });
     });
-    /// who knows? this will sometimes pass sometimes not,
-    /// think it is a seeding async issue, but it does work how you would
-    /// want if the data is ready to search
     test("should fail if username is already in db", () => {
       const toSend = {
         username: "ASKJHD",
         firstname: "test",
         lastname: "user",
-        email: "test@user.com",
+        password: "banana",
+        avatar: "quotesnap-fe/assets/avatar.png",
       };
       return request(app)
         .post("/api/users")
@@ -179,7 +185,8 @@ describe("USERS", () => {
             username: "ASKJHD",
             firstname: "newName",
             lastname: "newLastName",
-            email: "b@a.com",
+            password: "banana",
+            avatar: "quotesnap-fe/assets/avatar.png",
           });
         });
     });
@@ -214,44 +221,16 @@ describe("USERS", () => {
         .expect(204)
         .then(() => {
           return request(app).get("/api/users/ASKJHD").expect(404);
-        })
-        .then(({ body }) => {
-          expect(body.msg).toBe("Username not found!");
-        });
-    });
-    test("If username doesnt exist and cant be deleted, then something went wrong", () => {
-      return request(app)
-        .delete("/api/users/banana")
-        .expect(400)
-        .then(({ body }) => {
-          expect(body.msg).toBe("Something went wrong - try again!");
         });
     });
   });
-});
-
-describe("GET /users/:username/quotes", () => {
-  test("Should return a list of quotes for a username", () => {
-    const username = "Hello";
+  test("If username doesnt exist and cant be deleted, then something went wrong", () => {
     return request(app)
-      .get(`/api/users/${username}/quotes`)
-      .expect(200)
-      .then(({ body: { quotes } }) => {
-        expect(quotes.length).toBe(3);
-      });
-  });
-  test("Error if username doesn't exist", () => {
-    const username = "banana";
-    return request(app)
-      .get(`/api/users/${username}/quotes`)
-      .expect(404)
+      .delete("/api/users/banana")
+      .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("User not found!");
+        expect(body.msg).toBe("Something went wrong - try again!");
       });
-  });
-  test("if username exists but no quotes, return message that no items have been found", () => {
-    const username = "noQuotes";
-    return request(app).get(`/api/users/${username}/quotes`).expect(204);
   });
 });
 

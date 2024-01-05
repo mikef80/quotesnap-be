@@ -23,7 +23,7 @@ exports.getAllUsers = async (req, res, next) => {
 
 exports.postNewUser = async (req, res, next) => {
   const userInfo = req.body;
-  ["username", "firstname", "lastname", "email"].forEach((key) => {
+  ["username", "firstname", "lastname", "password", "avatar"].forEach((key) => {
     if (!Object.keys(userInfo).includes(key)) {
       res.status(400).send({ msg: "Bad request!" });
     }
@@ -53,10 +53,16 @@ exports.getUserByUsername = async (req, res, next) => {
 exports.patchUserByUsername = async (req, res, next) => {
   const userInfoToUpdate = req.body;
   const { username } = req.params;
-  if (!Object.keys(userInfoToUpdate).length) res.status(400).send({ msg: "Bad request!" });
+  if (!Object.keys(userInfoToUpdate).length)
+    res.status(400).send({ msg: "Bad request!" });
   else
     try {
-      const user = await updateUserByUsername(client, mongoDbName, username, userInfoToUpdate);
+      const user = await updateUserByUsername(
+        client,
+        mongoDbName,
+        username,
+        userInfoToUpdate
+      );
       if (!user) res.status(404).send({ msg: "Username not found!" });
       res.status(200).send({ user });
     } catch (next) {
@@ -69,7 +75,9 @@ exports.deleteUserByUsername = async (req, res, next) => {
   const { username } = req.params;
   try {
     const deleted = await removeUserByUsername(client, mongoDbName, username);
-    deleted.deletedCount ? res.sendStatus(204) : res.status(400).send({ msg: "Something went wrong - try again!" });
+    deleted.deletedCount
+      ? res.sendStatus(204)
+      : res.status(400).send({ msg: "Something went wrong - try again!" });
   } catch (next) {
   } finally {
     await client.close();
