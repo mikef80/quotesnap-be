@@ -41,5 +41,12 @@ const allUsers = [
     password: "banana",
     avatar: "quotesnap-fe/assets/avatar.png",
   },
+  {
+    username: "noQuotes",
+    firstname: "jonnie",
+    lastname: "harper",
+    password: "banana",
+    avatar: "quotesnap-fe/assets/avatar.png",
+  },
 ];
 module.exports = allUsers;
