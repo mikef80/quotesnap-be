@@ -40,10 +40,18 @@ exports.postNewUser = async (req, res, next) => {
 
 exports.getUserByUsername = async (req, res, next) => {
   const { username } = req.params;
+  const { password } = req.body;
+
   try {
     const user = await selectUserByUsername(client, mongoDbName, username);
+
     if (!user) res.status(404).send({ msg: "Username not found!" });
-    res.status(200).send({ user });
+    
+    if (password !== user.password) {
+      res.status(400).send({ msg: "Password is incorrect!" });
+    } else {
+      res.status(200).send({ user });
+    }
   } catch (next) {
   } finally {
     await client.close();
