@@ -45,9 +45,12 @@ describe("USERS", () => {
     });
   });
   describe("GET User by username", () => {
-    test("When given a username, should return the document for that user", async () => {
+    test("When given a username and correct password, should return that user", async () => {
+      const inputPassword = { password: "banana" };
+
       return request(app)
         .get("/api/users/ASKJHD")
+        .send(inputPassword)
         .expect(200)
         .then(({ body: { user } }) => {
           expect(user).toMatchObject({
@@ -66,6 +69,16 @@ describe("USERS", () => {
         .expect(404)
         .then(({ body }) => {
           expect(body.msg).toBe("Username not found!");
+        });
+    });
+    test("400, password is wrong", () => {
+      const inputPassword = { password: "jj" };
+      return request(app)
+        .get("/api/users/Hello")
+        .send(inputPassword)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Password is incorrect!");
         });
     });
   });
