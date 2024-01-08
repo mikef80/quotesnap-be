@@ -50,7 +50,7 @@ describe("USERS", () => {
 
       return request(app)
         .get("/api/users/ASKJHD")
-        .send(inputPassword)
+        .query(inputPassword)
         .expect(200)
         .then(({ body: { user } }) => {
           expect(user).toMatchObject({
