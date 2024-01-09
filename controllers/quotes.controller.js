@@ -3,7 +3,7 @@ const {
   selectQuotes,
   createNewQuote,
   selectQuoteByQuoteId,
-  removeQuoteById,
+  removeQuoteByQuoteId,
 } = require("../models/quotes.model");
 const { mongoLink, mongoDbName } = require("../testMongoDB");
 const client = new MongoClient(mongoLink);
@@ -66,6 +66,21 @@ exports.getQuoteById = async (req, res, next) => {
   }
 };
 
-exports.deleteQuoteById = async (id) => {
-  removeQuoteById(id);
+exports.deleteQuoteById = async (req, res, next) => {
+  const { quote_id } = req.params;
+  const hexRegex = /^[0-9a-fA-F]{24}$/;
+
+  if (hexRegex.test(quote_id)) {
+    try {
+      const quote = await removeQuoteByQuoteId(client, mongoDbName, quote_id);
+      if (!quote) res.status(404).send({ msg: "Quote not found!" });
+      console.log("deleted");
+      res.status(200).send({ msg: "Quote successfully deleted" });
+    } catch (next) {
+    } finally {
+      await client.close();
+    }
+  } else {
+    res.status(400).send({ msg: "Invalid ID!" });
+  }
 };

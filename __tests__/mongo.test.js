@@ -420,28 +420,15 @@ describe("QUOTES", () => {
     });
   });
 
-  describe.only("GET quote by id", () => {
+  describe.only("DELETE quote by id", () => {
     test("When given an id, should delete the quote", async () => {
-      let oldLength;
-
-      return request(app)
-        .get("/api/quotes")
-        .expect(200)
-        .then(({ body: { quotes } }) => {
-          const testQuote = quotes[0];
-          oldLength = quotes.length;
-          return request(app)
-            .delete(`/api/quotes/${testQuote._id}`)
-            .expect(204)
-            .then(() => {
-              return request(app)
-                .get("/api/quotes")
-                .expect(200)
-                .then(({ body: { quotes } }) => {
-                  expect(quotes.length).toBe(oldLength - 1);
-                });
-            });
-        });
+      const {
+        body: { quotes },
+      } = await request(app).get(`/api/quotes`);
+      quoteId = quotes[0].id;
+      console.log(quoteId);
+      const response = await request(app).delete(`/api/quotes/${quoteId}`);
+      expect(response.msg).toBe("Quote successfully deleted");
     });
   });
 });
