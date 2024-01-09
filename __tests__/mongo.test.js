@@ -407,3 +407,21 @@ describe("QUOTES", () => {
     });
   });
 });
+describe.only("POST, categories", () => {
+  test("200, return new cateogry that has been added ", () => {
+    const newCategory = {
+      categoryName: "pwerful",
+    };
+
+    return request(app)
+      .post(`/api/categories`)
+      .expect(201)
+      .send(newCategory)
+      .then(({ body: { category } }) => {
+        expect(category).toMatchObject({
+          ...newCategory,
+          _id: expect.any(String),
+        });
+      });
+  });
+});
