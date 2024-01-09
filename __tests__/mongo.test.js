@@ -425,10 +425,12 @@ describe("QUOTES", () => {
       const {
         body: { quotes },
       } = await request(app).get(`/api/quotes`);
-      quoteId = quotes[0].id;
+      quoteId = quotes[0]._id;
+
       console.log(quoteId);
-      const response = await request(app).delete(`/api/quotes/${quoteId}`);
-      expect(response.msg).toBe("Quote successfully deleted");
+      const { body } = await request(app).delete(`/api/quotes/${quoteId}`);
+
+      expect(body.msg).toBe("Quote successfully deleted");
     });
   });
 });
