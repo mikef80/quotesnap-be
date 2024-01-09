@@ -407,7 +407,7 @@ describe("QUOTES", () => {
     });
   });
 });
-describe.only("POST, categories", () => {
+describe("POST, categories", () => {
   test("200, return new cateogry that has been added ", () => {
     const newCategory = {
       categoryName: "pwerful",
@@ -424,7 +424,7 @@ describe.only("POST, categories", () => {
         });
       });
   });
-  test.only("400, bad request, category already exists ", () => {
+  test("400, bad request, category already exists ", () => {
     const newCategory = {
       categoryName: "Book",
     };
