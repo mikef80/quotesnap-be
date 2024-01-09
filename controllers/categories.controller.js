@@ -19,6 +19,12 @@ exports.postCategories = async (req, res, next) => {
 
   try {
     const category = await createCategory(client, mongoDbName, categoryName);
+
+    if (category === null) {
+      res.status(400).send({ msg: "Bad Request" });
+    }
+
+    res.status(201).send({ category: category });
   } catch {
   } finally {
     await client.close();

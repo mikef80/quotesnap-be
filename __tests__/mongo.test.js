@@ -424,4 +424,20 @@ describe.only("POST, categories", () => {
         });
       });
   });
+  test.only("400, bad request, category already exists ", () => {
+    const newCategory = {
+      categoryName: "Book",
+    };
+
+    return request(app)
+      .post(`/api/categories`)
+      .expect(400)
+      .send(newCategory)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad Request")
+      })
+
+  });
+  
+  
 });

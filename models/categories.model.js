@@ -6,12 +6,25 @@ exports.selectCategories = async (client, mongoDbName) => {
 };
 
 exports.createCategory = async (client, mongoDbName, categoryName) => {
+  await client.connect();
 
-await client.connect()
-const newCategory = await client.db(mongoDbName).collection("Categories").insertOne({categoryName : categoryName}).then((res) => {
-return client.db(mongoDbName).collection("Categories").findOne({_id : res.insertedId})
+  const categoryExists = await client
+    .db(mongoDbName)
+    .collection("Categories")
+    .findOne({ categoryName: categoryName });
 
-})
-return newCategory
-
-}
+  if (categoryExists) {
+    return null;
+  }
+  const newCategory = await client
+    .db(mongoDbName)
+    .collection("Categories")
+    .insertOne({ categoryName: categoryName })
+    .then((res) => {
+      return client
+        .db(mongoDbName)
+        .collection("Categories")
+        .findOne({ _id: res.insertedId });
+    });
+  return newCategory;
+};
