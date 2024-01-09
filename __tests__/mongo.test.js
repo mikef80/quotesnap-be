@@ -75,7 +75,7 @@ describe("USERS", () => {
       const inputPassword = { password: "jj" };
       return request(app)
         .get("/api/users/Hello")
-        .send(inputPassword)
+        .query(inputPassword)
         .expect(400)
         .then(({ body }) => {
           expect(body.msg).toBe("Password is incorrect!");
@@ -417,6 +417,32 @@ describe("QUOTES", () => {
         .then(({ body: { categories } }) => {
           expect(categories.length).toBe(3);
         });
+    });
+  });
+
+  describe("DELETE quote by id", () => {
+    test("When given an id, should delete the quote", async () => {
+      const {
+        body: { quotes },
+      } = await request(app).get(`/api/quotes`);
+      quoteId = quotes[0]._id;
+
+      console.log(quoteId);
+      const { body } = await request(app).delete(`/api/quotes/${quoteId}`);
+
+      expect(body.msg).toBe("Quote successfully deleted");
+    });
+
+    test("When given an invalid id, should return a 400 error", async () => {
+      const {
+        body: { quotes },
+      } = await request(app).get(`/api/quotes`);
+      quoteId = 100;
+
+      console.log(quoteId);
+      const { body } = await request(app).delete(`/api/quotes/${quoteId}`);
+
+      expect(body.msg).toBe("Invalid ID!");
     });
   });
 });
