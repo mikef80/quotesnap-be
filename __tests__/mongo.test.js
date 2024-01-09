@@ -30,7 +30,7 @@ describe("USERS", () => {
         .get("/api/users")
         .expect(200)
         .then(({ body: { users } }) => {
-          expect(users.length).toBe(6);
+          expect(users.length).toBe(7);
           users.forEach((user) => {
             expect(user).toMatchObject({
               _id: expect.any(String),
@@ -420,7 +420,7 @@ describe("QUOTES", () => {
     });
   });
 });
-describe.only("POST, categories", () => {
+describe("POST, categories", () => {
   test("200, return new cateogry that has been added ", () => {
     const newCategory = {
       categoryName: "pwerful",
@@ -437,7 +437,7 @@ describe.only("POST, categories", () => {
         });
       });
   });
-  test.only("400, bad request, category already exists ", () => {
+  test("400, bad request, category already exists ", () => {
     const newCategory = {
       categoryName: "Book",
     };
@@ -447,10 +447,7 @@ describe.only("POST, categories", () => {
       .expect(400)
       .send(newCategory)
       .then((res) => {
-        expect(res.body.msg).toBe("Bad Request")
-      })
-
+        expect(res.body.msg).toBe("Bad Request");
+      });
   });
-  
-  
 });
