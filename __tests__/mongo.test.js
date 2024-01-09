@@ -420,3 +420,37 @@ describe("QUOTES", () => {
     });
   });
 });
+describe.only("POST, categories", () => {
+  test("200, return new cateogry that has been added ", () => {
+    const newCategory = {
+      categoryName: "pwerful",
+    };
+
+    return request(app)
+      .post(`/api/categories`)
+      .expect(201)
+      .send(newCategory)
+      .then(({ body: { category } }) => {
+        expect(category).toMatchObject({
+          ...newCategory,
+          _id: expect.any(String),
+        });
+      });
+  });
+  test.only("400, bad request, category already exists ", () => {
+    const newCategory = {
+      categoryName: "Book",
+    };
+
+    return request(app)
+      .post(`/api/categories`)
+      .expect(400)
+      .send(newCategory)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad Request")
+      })
+
+  });
+  
+  
+});
