@@ -1,5 +1,10 @@
 const MongoClient = require("mongodb").MongoClient;
-const { selectQuotes, createNewQuote, selectQuoteByQuoteId } = require("../models/quotes.model");
+const {
+  selectQuotes,
+  createNewQuote,
+  selectQuoteByQuoteId,
+  removeQuoteById,
+} = require("../models/quotes.model");
 const { mongoLink, mongoDbName } = require("../testMongoDB");
 const client = new MongoClient(mongoLink);
 
@@ -59,4 +64,8 @@ exports.getQuoteById = async (req, res, next) => {
   } else {
     res.status(400).send({ msg: "Invalid ID!" });
   }
+};
+
+exports.deleteQuoteById = async (id) => {
+  removeQuoteById(id);
 };
