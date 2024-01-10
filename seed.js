@@ -8,7 +8,7 @@ const { mongoLink, mongoDbName } = require("./testMongoDB");
 
 const MongoClient = require("mongodb").MongoClient;
 
-async function seedDB(mongoLink, mongoDbName, allUsers, allCategories, allQuotedes) {
+async function seedDB(mongoLink, mongoDbName, allUsers, allCategories, allQuotes) {
   const client = new MongoClient(mongoLink);
   try {
     await client.connect();

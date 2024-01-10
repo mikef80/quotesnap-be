@@ -265,7 +265,7 @@ describe("QUOTES", () => {
         .get("/api/quotes")
         .expect(200)
         .then(({ body: { quotes } }) => {
-          expect(quotes.length).toBe(11);
+          expect(quotes.length).toBe(allQuotes.length);
           quotes.forEach((quote) => {
             expect(quote).toMatchObject({
               quoteText: expect.any(String),
