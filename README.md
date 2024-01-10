@@ -18,8 +18,7 @@ https://github.com/mikef80/quotesnap-fe
 
 1. Clone/fork the repo 
      `git clone https://github.com/mikef80/quotesnap-be`
-2. install all the packages     
-     `npm i` 
+2. install all the packages `npm i` 
 3. Create a Mongo DB and link it to the server
 4. To perform TDD, run `npm test`
 5. To seed the database you need to run `npm run seed`
